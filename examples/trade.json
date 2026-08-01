@@ -1,0 +1,16 @@
+{
+  "venue": "hyperliquid",
+  "venue_address": "0x0000000000000000000000000000000000000000",
+  "pair": "SOL-PERP",
+  "side": "long",
+  "entry_price": "184.37",
+  "exit_price": "189.02",
+  "size": "12.5",
+  "pnl": "58.125",
+  "fees": "0.4271",
+  "open_timestamp": 1785600000000,
+  "close_timestamp": 1785603600000,
+  "venue_open_id": "496459510831",
+  "venue_close_id": "496459998102",
+  "strategy_id": "example-v1"
+}
