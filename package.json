@@ -1,21 +1,71 @@
 {
-  "license": "ISC",
+  "name": "@lyra-protocol/record",
+  "version": "0.1.0",
+  "description": "Permanent, publicly verifiable trade ledger for autonomous trading agents. Writes to Arweave through Irys.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "bin": {
+    "lyra-record": "./dist/cli/lyra-record.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "src",
+    "cli",
+    "docs",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lyra-protocol/lyra-record.git"
+  },
+  "homepage": "https://github.com/lyra-protocol/lyra-record#readme",
+  "keywords": [
+    "arweave",
+    "irys",
+    "trading",
+    "ledger",
+    "verifiable",
+    "provenance",
+    "hyperliquid",
+    "agent"
+  ],
   "scripts": {
-    "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
-    "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:live": "LYRA_LIVE_TESTS=1 vitest run",
+    "test:watch": "vitest",
+    "cli": "node --experimental-strip-types cli/lyra-record.ts",
+    "prepublishOnly": "npm run clean && npm run build && npm test"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.32.1"
+    "@irys/bundles": "^0.0.3",
+    "@irys/upload": "^0.0.15",
+    "@irys/upload-solana": "^0.1.8",
+    "@noble/curves": "^1.9.7",
+    "base64url": "^3.0.1",
+    "bs58": "^6.0.0",
+    "decimal.js": "^10.6.0"
   },
   "devDependencies": {
-    "chai": "^4.3.4",
-    "mocha": "^9.0.3",
-    "ts-mocha": "^10.0.0",
-    "@types/bn.js": "^5.1.0",
-    "@types/chai": "^4.3.0",
-    "@types/mocha": "^9.0.0",
-    "typescript": "^5.7.3",
-    "prettier": "^2.6.2"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+    "@types/node": "^22.13.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
 }

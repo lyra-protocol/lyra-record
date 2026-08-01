@@ -1,8 +1,11 @@
-.anchor
-.DS_Store
-target
-**/*.rs.bk
 node_modules
-test-ledger
-.yarn
+dist
+.DS_Store
+
+# Local secrets. Never commit a signing key.
 .env
+*.key.json
+keys/
+
+# Local receipt + sequence store written by the library at runtime.
+.lyra-record/
