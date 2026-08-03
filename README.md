@@ -77,7 +77,7 @@ import { loadKeyFromEnv, nextSequence, recordTrade } from "@lyra-protocol/record
 const key = loadKeyFromEnv();            // LYRA_RECORD_KEY
 
 const result = await recordTrade({
-  schema_version: 1,
+  schema_version: 2,
   owner: key.publicKey,
   venue: "hyperliquid",
   venue_address: "0xabc…",               // public, so anyone can reconcile
@@ -94,6 +94,7 @@ const result = await recordTrade({
   venue_close_id: "496459998102",
   strategy_id: "funding-carry-v1",
   sequence: nextSequence(key.publicKey),
+  reasoning_id: null,                    // or the Arweave id of the reasoning record
 }, key);
 
 result.arweaveId;          // permanent address of the record
@@ -138,7 +139,7 @@ Versioned from day one, so future changes never invalidate old entries.
 
 | field | type | notes |
 |---|---|---|
-| `schema_version` | number | always `1` for this release |
+| `schema_version` | number | `2` for this release; `1` still verifies |
 | `owner` | string | base58 ed25519 public key |
 | `venue` | string | e.g. `"hyperliquid"` |
 | `venue_address` | string | the trading wallet — this is what makes the record checkable |
@@ -155,6 +156,7 @@ Versioned from day one, so future changes never invalidate old entries.
 | `venue_close_id` | string | venue order id |
 | `strategy_id` | string | strategy version that produced this trade |
 | `sequence` | number | monotonic per owner, from 0 |
+| `reasoning_id` | string \| null | v2. Arweave id of the decision record, or `null` when deterministic |
 
 Each upload is tagged `App-Name`, `Schema-Version`, `Owner`, `Venue`,
 `Venue-Address`, `Pair`, `Strategy-Id`, `Sequence`, `Close-Timestamp` and
@@ -181,6 +183,27 @@ network either. Use small, clearly-tagged test records on mainnet during
 development and leave them there — a visible test phase is more honest than a
 hidden one. This repo's own test records are still on mainnet and are used as the
 worked example in `docs/VERIFY.md`.
+
+## Schema versions
+
+| Version | Fields | Adds |
+|---|---|---|
+| v1 | 17 | the trade |
+| **v2** *(current)* | 18 | `reasoning_id` — Arweave id of the record holding the model, prompt, schema and raw output behind the decision |
+
+`reasoning_id` is nullable: a trade produced by deterministic rules has nothing
+to explain. It is *required* though, so "no reasoning" is an explicit `null`
+rather than an absence that could mean either nothing happened or something was
+removed.
+
+**v1 records stay verifiable forever.** Canonicalisation and the signing prefix
+follow the record's own `schema_version`, never the installed release — so a v1
+record is checked with the v1 field order and the `lyra-record/v1:` prefix. The
+frozen field orders are exported as `CANONICAL_FIELD_ORDER_V1` and
+`CANONICAL_FIELD_ORDER_V2`.
+
+This is verified two ways: in the suite (`test/versioning.test.ts`) and against
+the real v1 record on Arweave, which still passes every check under this release.
 
 ## Stability
 

@@ -192,7 +192,7 @@ describe("tags", () => {
     const tags = Object.fromEntries(buildTags(trade).map((t) => [t.name, t.value]));
     expect(tags).toEqual({
       [TAG_NAMES.appName]: "lyra-record",
-      [TAG_NAMES.schemaVersion]: "1",
+      [TAG_NAMES.schemaVersion]: "2",
       [TAG_NAMES.owner]: trade.owner,
       [TAG_NAMES.venue]: "hyperliquid",
       [TAG_NAMES.venueAddress]: trade.venue_address,

@@ -20,7 +20,7 @@ export function testKey(seedByte = 7): OwnerKey {
 export function testTrade(overrides: Partial<TradeRecord> = {}): TradeRecord {
   const key = testKey();
   return {
-    schema_version: 1,
+    schema_version: 2,
     owner: key.publicKey,
     venue: "hyperliquid",
     venue_address: "0x1234567890abcdef1234567890abcdef12345678",
@@ -37,6 +37,7 @@ export function testTrade(overrides: Partial<TradeRecord> = {}): TradeRecord {
     venue_close_id: "496459998102",
     strategy_id: "funding-carry-v1",
     sequence: 0,
+    reasoning_id: null,
     ...overrides,
   };
 }

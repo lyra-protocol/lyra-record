@@ -15,7 +15,7 @@ import bs58 from "bs58";
 import { KeyError } from "./errors.js";
 import { signingMessage } from "./schema.js";
 import type { RecordSignature, SignedTradeRecord, TradeRecord } from "./types.js";
-import { SCHEMA_ID } from "./schema.js";
+import { schemaIdFor, type SchemaVersion } from "./schema.js";
 
 export type OwnerKey = {
   /** Base58 ed25519 public key. This is the `owner` in every record it signs. */
@@ -129,7 +129,7 @@ export function signTrade(trade: TradeRecord, key: OwnerKey): SignedTradeRecord 
   }
   const signature = ed25519.sign(signingMessage(trade), key.seed);
   return {
-    schema: SCHEMA_ID,
+    schema: schemaIdFor(trade.schema_version as SchemaVersion),
     trade,
     signature: {
       scheme: "ed25519",

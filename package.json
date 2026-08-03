@@ -1,6 +1,6 @@
 {
   "name": "@lyra-protocol/record",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Permanent, publicly verifiable trade ledger for autonomous trading agents. Writes to Arweave through Irys.",
   "license": "MIT",
   "type": "module",

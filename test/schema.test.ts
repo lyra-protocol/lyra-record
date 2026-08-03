@@ -101,8 +101,10 @@ describe("validation", () => {
     expect(() => validateTrade(trade)).toThrow(/unknown field/);
   });
 
-  it("rejects a schema_version other than 1", () => {
-    expect(() => validateTrade(testTrade({ schema_version: 2 }))).toThrow(SchemaError);
+  it("rejects a schema_version this library does not support", () => {
+    // v1 and v2 are both valid; anything else is not. Version-specific
+    // behaviour is covered in versioning.test.ts.
+    expect(() => validateTrade(testTrade({ schema_version: 3 }))).toThrow(SchemaError);
   });
 
   it("rejects a close before the open", () => {

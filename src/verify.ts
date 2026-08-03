@@ -24,7 +24,7 @@ import {
   tagsToRecord,
 } from "./irys.js";
 import { findGaps } from "./query.js";
-import { canonicalise, SIGNING_PREFIX, validateSignedRecord } from "./schema.js";
+import { serialiseRecord, signingPrefixFor, validateSignedRecord, type SchemaVersion } from "./schema.js";
 import { verifyTradeSignature } from "./signing.js";
 import { fetchData } from "./irys.js";
 import type {
@@ -208,7 +208,7 @@ export async function verifyRecord(
     return finalise(report);
   }
 
-  const canonicalMatches = raw === expectedSerialisation(record);
+  const canonicalMatches = raw === serialiseRecord(record);
   add(
     "canonical-bytes",
     canonicalMatches ? "pass" : "fail",
@@ -222,7 +222,7 @@ export async function verifyRecord(
     "owner-signature",
     signatureValid ? "pass" : "fail",
     signatureValid
-      ? `ed25519 signature by ${record.trade.owner} over "${SIGNING_PREFIX}" + canonical JSON`
+      ? `ed25519 signature by ${record.trade.owner} over "${signingPrefixFor(record.trade.schema_version as SchemaVersion)}" + canonical JSON`
       : `signature does not verify against ${record.trade.owner}. This record was not produced by the key it names.`,
   );
 
@@ -357,16 +357,6 @@ export async function verifyOwner(
     records: checked,
     ok: sequence.contiguous && checked.every((r) => r.signatureValid),
   };
-}
-
-function expectedSerialisation(record: SignedTradeRecord): string {
-  return (
-    `{"schema":${JSON.stringify(record.schema)},` +
-    `"trade":${canonicalise(record.trade)},` +
-    `"signature":{"scheme":${JSON.stringify(record.signature.scheme)},` +
-    `"public_key":${JSON.stringify(record.signature.public_key)},` +
-    `"value":${JSON.stringify(record.signature.value)}}}`
-  );
 }
 
 function tagMismatches(tags: Record<string, string>, record: SignedTradeRecord): string[] {

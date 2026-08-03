@@ -348,6 +348,26 @@ failure modes should not be trusted about anything else.
 Tags are indexed metadata and are **not** covered by the owner signature. If a tag
 and the signed body disagree, believe the body.
 
+## 6b. A note on schema versions
+
+The record you are checking carries its own `schema_version`. Everything above —
+the field order, and the `lyra-record/vN:` prefix — follows **that** number, not
+whatever version the library happens to be on.
+
+| Version | Canonical fields |
+|---|---|
+| v1 | the 17 listed in §4 |
+| v2 | those 17 plus `reasoning_id`, which sorts between `pnl` and `schema_version` |
+
+`reasoning_id` is either `null` (written as the bare literal, not the string
+`"null"`) or the Arweave id of a second record holding the model, prompt, schema
+and raw output behind the decision. Where it is present, that record was
+timestamped by Irys **before the trade resolved** — so it is a prediction you can
+check, not an explanation written afterwards.
+
+A v1 record signed in 2026 must still verify in 2036. If it ever does not, this
+library is broken, not the record.
+
 ## 7. Or do all of it at once
 
 ```sh

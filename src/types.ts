@@ -47,6 +47,16 @@ export type TradeRecord = {
   strategy_id: string;
   /** Monotonic per owner, starting at 0. A missing number is a visible gap. */
   sequence: number;
+  /**
+   * Arweave id of the reasoning record behind this trade — model, prompt,
+   * schema, inputs and raw output (DESIGN.md §4.3).
+   *
+   * Null when the decision was deterministic and there is nothing to explain.
+   * Required from schema v2 onward, so "no reasoning" is an explicit null rather
+   * than an absence that could mean either nothing happened or something was
+   * stripped.
+   */
+  reasoning_id: string | null;
 };
 
 export type SignatureScheme = "ed25519";
