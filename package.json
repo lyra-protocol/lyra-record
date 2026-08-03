@@ -52,7 +52,8 @@
     "test:live": "LYRA_LIVE_TESTS=1 vitest run",
     "test:watch": "vitest",
     "cli": "node --experimental-strip-types cli/lyra-record.ts",
-    "prepublishOnly": "npm run clean && npm run build && npm test"
+    "prepublishOnly": "npm run clean && npm run build && npm test",
+    "prepare": "npm run build"
   },
   "dependencies": {
     "@irys/bundles": "^0.0.3",
